@@ -8,6 +8,12 @@ from sympy import nextprime
 from math import gcd, log
 from random import randint,seed
 import time
+e_chiave=None
+es1=None
+es2=None
+aumenta=None
+
+
 
 def trasforma_primo():
     var1=e1.get()
@@ -22,6 +28,8 @@ def trasforma_primo():
     e1.delete(0,END)
     e1.insert(0,str(var))
 
+
+
 def calcola_campo():
     var1=e1.get()
     var2=e2.get()
@@ -32,6 +40,8 @@ def calcola_campo():
     if var1.isnumeric() == False or var2.isnumeric()==False or var3.isnumeric==False:
         messagebox.showerror('Attenzione', 'Non possono esserci lettere')
         return
+    global e_chiave,es1,es2,aumenta
+
     var1=int(var1)
     var2=int(var2)
     var3=int(var3)
@@ -46,12 +56,12 @@ def calcola_campo():
     dim_Bit=int(log(n,2))
     e8.delete(0,END)
     e8.insert(0,str(dim_Bit))
-    e=dim_Bitr//2
+    e_chiave=dim_Bitr//2
     ee1=var3//2
     ee2=var3-ee1
-    es1=e-ee1
-    es2=e+ee2
-    chiave=ni**e
+    es1=e_chiave-ee1
+    es2=e_chiave+ee2
+    chiave=ni**e_chiave
     if es1+es2==dim_Bitr:
         pass
     elif es1+es2>dim_Bitr:
@@ -103,7 +113,7 @@ def calcola_campo():
         if aumenta>10:
             aumenta=aumenta//10        
     e4.delete(0,END)
-    ee4=('ni**'+str(e))
+    ee4=('ni**'+str(e_chiave))
     e4.insert(0,str(ee4))
     e5.delete(0,END)
     ee5=('p=nextprime ('+'ni**'+str(es1)+'+randint('+'1,'+str(aumenta)+'*(2**'+str(campo)+')')
@@ -115,11 +125,29 @@ def calcola_campo():
     e7.insert(0,str(campo))
     e9.delete(0,END)
     e9.insert(0,str(var1))
+    
 
+def crea_dati_cassaforte():
+    verifica=e4.get()
+    if verifica=='':
+        messagebox.showerror('Attenzione', 'Creare prima il codice')
+        return
+    global e_chiave,es1,es2,aumenta
+    scrivi=open('D:\dati_cassaforte.txt','w')
+    scrivi.write(e9.get()+'\n') 
+    scrivi.write(str(e_chiave)+'\n') 
+    scrivi.write(str(es1)+'\n') 
+    scrivi.write(str(es2)+'\n') 
+    scrivi.write(str(aumenta)+'\n') 
+    scrivi.write(e7.get()+'\n') 
+    scrivi.write(e8.get()+'\n') 
+    scrivi.close()
+    messagebox.showinfo('Salva','Salvataggio Dati Riuscito')
+
+    
 root=tb.Window(themename='cyborg')
 root.title('Analizzatore Campo')
 root.geometry('600x530')
-
 #** parte superiore
 l1=tb.Label(text='Inserire un numero digitato Casualmente\no che ne conoscete gli attributi: Tipo RSA',font='arial 12')
 l1.place(x=10,y=30)
@@ -169,5 +197,6 @@ l8.place(x=10,y=390+yy)
 e8=tb.Entry(width=(5))
 e8.place(x=100,y=390+yy)
 #************************************************************************
-
+b3=tb.Button(text='Crea Dati per Cassaforte',style='success.Outline',command=crea_dati_cassaforte)
+b3.place(x=100,y=500)
 root.mainloop()
